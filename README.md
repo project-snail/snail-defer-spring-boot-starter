@@ -4,6 +4,14 @@
 
 开启defer操作
 
+```xml
+<dependency>
+    <groupId>io.github.project-snail</groupId>
+    <artifactId>snail-defer-starter</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
 ```yaml
 snail:
   defer:
