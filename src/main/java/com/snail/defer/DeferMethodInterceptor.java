@@ -1,5 +1,6 @@
 package com.snail.defer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -11,6 +12,7 @@ import org.aopalliance.intercept.MethodInvocation;
  * @Description:
  * @date: 2021/04/11
  */
+@Slf4j
 public class DeferMethodInterceptor implements MethodInterceptor {
 
     @Override
@@ -19,7 +21,7 @@ public class DeferMethodInterceptor implements MethodInterceptor {
         Exception err = null;
         try {
 //            初始化存储操作的holder
-            DeferUtil.initHolder();
+            DeferUtil.initHolder(invocation.getMethod().getDeclaringClass(), invocation.getMethod());
             res = invocation.proceed();
         } catch (Exception e) {
 //            保存异常信息
@@ -30,7 +32,8 @@ public class DeferMethodInterceptor implements MethodInterceptor {
             for (DeferHolder.Defer defer : deferHolder.getDeferList()) {
                 try {
                     defer.run();
-                } catch (Exception ignored) {
+                } catch (Exception e) {
+                    log.warn("defer error", e);
                 }
             }
 //            如果异常信息不为空

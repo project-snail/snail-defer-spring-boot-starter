@@ -15,6 +15,11 @@ import java.util.function.Function;
 class DeferHolder {
 
     /**
+     * 当前栈帧的名称 declaringClass:methodName
+     */
+    private final String curStackName;
+
+    /**
      * 方法内定义的延迟操作
      */
     private List<Defer> deferList = new LinkedList<>();
@@ -25,12 +30,20 @@ class DeferHolder {
      */
     private Function<Exception, Object> recoverFun;
 
+    DeferHolder(String curStackName) {
+        this.curStackName = curStackName;
+    }
+
     Function<Exception, Object> getRecoverFun() {
         return recoverFun;
     }
 
     void setRecoverFun(Function<Exception, Object> recoverFun) {
         this.recoverFun = recoverFun;
+    }
+
+    public String getCurStackName() {
+        return curStackName;
     }
 
     @FunctionalInterface
